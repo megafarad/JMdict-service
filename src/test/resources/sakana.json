@@ -1,0 +1,80 @@
+{
+  "ent_seq": "1578010",
+  "k_ele": [
+    {
+      "keb": "魚",
+      "ke_inf": null,
+      "ke_pri": [
+        "ichi1",
+        "ichi2",
+        "news1",
+        "nf03"
+      ]
+    }
+  ],
+  "r_ele": [
+    {
+      "reb": "さかな",
+      "re_nokanji": null,
+      "re_restr": null,
+      "re_inf": null,
+      "re_pri": [
+        "ichi1",
+        "news1",
+        "nf03"
+      ]
+    },
+    {
+      "reb": "うお",
+      "re_nokanji": null,
+      "re_restr": null,
+      "re_inf": null,
+      "re_pri": [
+        "ichi2"
+      ]
+    }
+  ],
+  "sense": [
+    {
+      "stagk": null,
+      "stagr": null,
+      "pos": [
+        "noun (common) (futsuumeishi)"
+      ],
+      "xref": null,
+      "ant": null,
+      "field": null,
+      "misc": null,
+      "s_inf": null,
+      "lsource": null,
+      "dial": null,
+      "gloss": [
+        {
+          "lang": "eng",
+          "content": "fish",
+          "g_gend": null,
+          "g_type": null
+        }
+      ],
+      "example": [
+        {
+          "ex_srce": {
+            "exsrc_type": "tat",
+            "content": "225005"
+          },
+          "ex_text": "魚",
+          "ex_sent": [
+            {
+              "lang": "jpn",
+              "content": "こうして私はいつも魚を料理する。"
+            },
+            {
+              "lang": "eng",
+              "content": "This is how I usually cook fish."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
