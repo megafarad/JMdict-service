@@ -51,21 +51,18 @@ class EntryRepository(db: Database, profile: JdbcProfile) extends EntryRepositor
     val onlyKana = query.forall(detector.isKana)
 
     if (containsKanji) {
-      val exactMatch = for {
-        matchingIndexes <- entryIndexes.filter(_.kanji === query).sortBy(_.priPoint)
-        jsons <- entryJsons if matchingIndexes.id === jsons.entrySeq
-      } yield (jsons, matchingIndexes)
-
       val likeMatch = for {
-        matchingIndexes <- entryIndexes.filter(_.kanji like s"%$query%").sortBy(_.priPoint)
+        matchingIndexes <- entryIndexes.filter(_.kanji like s"%$query%")
         jsons <- entryJsons if matchingIndexes.id === jsons.entrySeq
-      } yield (jsons, matchingIndexes)
+      } yield (matchingIndexes, jsons)
 
-      val matches = (exactMatch union likeMatch).distinctOn(_._1.json)
+      val matches = likeMatch.sortBy {
+        case (matchingIndexes, _) => (Case If(matchingIndexes.kanji === query) Then 0 Else 1, matchingIndexes.priPoint)
+      }
 
       db.run(matches.result).map {
         results => results.map {
-          case (EntryJson(_, json), EntryIndex(_, _, _, _, _)) => read[Entry](json)
+          case (_, EntryJson(_, json)) => read[Entry](json)
         }
       }
     } else if (onlyKana) {
@@ -75,33 +72,37 @@ class EntryRepository(db: Database, profile: JdbcProfile) extends EntryRepositor
       } yield (jsons, matchingIndexes)
 
       val likeMatch = for {
-        matchingIndexes <- entryIndexes.filter(_.reading like s"%$query%").sortBy(_.priPoint)
+        matchingIndexes <- entryIndexes.filter(_.reading like s"%$query%")
         jsons <- entryJsons if matchingIndexes.id === jsons.entrySeq
-      } yield (jsons, matchingIndexes)
+      } yield (matchingIndexes, jsons)
 
-      val matches = (exactMatch union likeMatch).distinctOn(_._1.json)
+      val matches = likeMatch.sortBy {
+        case (matchingIndexes, _) => (Case If(matchingIndexes.reading === query) Then 0 Else 1, matchingIndexes.priPoint)
+      }
 
       db.run(matches.result).map {
         results => results.map {
-          case (EntryJson(_, json), EntryIndex(_, _, _, _, _)) => read[Entry](json)
+          case (_, EntryJson(_, json)) => read[Entry](json)
         }
       }
     } else {
       val bestMatch = for {
         matchingIndexes <- entryIndexes.filter(_.meaning like s"%$query;%").sortBy(_.priPoint)
         jsons <- entryJsons if matchingIndexes.id === jsons.entrySeq
-      } yield (jsons, matchingIndexes)
+      } yield (matchingIndexes, jsons)
 
       val likeMatch = for {
         matchingIndexes <- entryIndexes.filter(_.meaning like s"%$query%").sortBy(_.priPoint)
         jsons <- entryJsons if matchingIndexes.id === jsons.entrySeq
-      } yield (jsons, matchingIndexes)
+      } yield (matchingIndexes, jsons)
 
-      val matches = (bestMatch union likeMatch).distinctOn(_._1.json)
+      val matches = likeMatch.sortBy {
+        case (matchingIndexes, _) => (Case If(matchingIndexes.meaning like s"%$query;%") Then 0 Else 1, matchingIndexes.priPoint)
+      }
 
       db.run(matches.result).map {
         results => results.map {
-          case (EntryJson(_, json), EntryIndex(_, _, _, _, _)) => read[Entry](json)
+          case (_, EntryJson(_, json)) => read[Entry](json)
         }
       }
     }
