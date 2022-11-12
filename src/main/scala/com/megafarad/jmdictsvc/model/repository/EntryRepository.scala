@@ -86,18 +86,13 @@ class EntryRepository(db: Database, profile: JdbcProfile) extends EntryRepositor
         }
       }
     } else {
-      val bestMatch = for {
-        matchingIndexes <- entryIndexes.filter(_.meaning like s"%$query;%").sortBy(_.priPoint)
-        jsons <- entryJsons if matchingIndexes.id === jsons.entrySeq
-      } yield (matchingIndexes, jsons)
-
       val likeMatch = for {
         matchingIndexes <- entryIndexes.filter(_.meaning like s"%$query%").sortBy(_.priPoint)
         jsons <- entryJsons if matchingIndexes.id === jsons.entrySeq
       } yield (matchingIndexes, jsons)
 
       val matches = likeMatch.sortBy {
-        case (matchingIndexes, _) => (Case If(matchingIndexes.meaning like s"%$query;%") Then 0 Else 1, matchingIndexes.priPoint)
+        case (matchingIndexes, _) => (Case If(matchingIndexes.meaning like s"$query;%") Then 0 Else 1, matchingIndexes.priPoint)
       }
 
       db.run(matches.result).map {
