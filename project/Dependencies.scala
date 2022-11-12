@@ -5,7 +5,7 @@ object Version {
   val slick = "3.4.1"
   val postgres = "42.5.0"
   val akkaHttp = "10.4.0"
-  val akkaQuartz = "1.9.3-akka-2.6.x"
+  val quartz = "2.3.2"
   val json4s = "4.0.6"
   val akkaHttpJson4s = "1.39.2"
   val logbackClassic = "1.4.4"
@@ -21,7 +21,7 @@ object Library {
   val slickHikariCP = "com.typesafe.slick" %% "slick-hikaricp"        % Version.slick
   val postgresql = "org.postgresql"         % "postgresql"            % Version.postgres
   val akkaHttp = "com.typesafe.akka"       %% "akka-http"             % Version.akkaHttp
-  val akkaQuartz = "com.enragedginger"     %% "akka-quartz-scheduler" % Version.akkaQuartz
+  val quartz = "org.quartz-scheduler"       % "quartz"                % Version.quartz
   val orgJson =  "org.json"                 % "json"                  % Version.orgJson
   val json4sNative = "org.json4s"          %% "json4s-native"         % Version.json4s
   val json4sJackson = "org.json4s"         %% "json4s-jackson"        % Version.json4s
@@ -40,9 +40,7 @@ object Dependencies {
     akkaStream,
     slick,
     slickHikariCP,
-    postgresql,
-    akkaHttp,
-    akkaQuartz,
+    quartz,
     orgJson,
     json4sNative,
     json4sJackson,
