@@ -13,34 +13,51 @@ class EntryRepositorySpec extends AsyncFreeSpec with DatabaseSpec with Matchers 
   implicit val formats: Formats = Serialization.formats(NoTypeHints)
 
   "EntryRepositorySpec" - {
-    val entryJson = Source.fromResource("sakana.json").mkString("")
-    val entry = read[Entry](entryJson)
-    "should add entry successfully" in {
-      entryRepository.upsert(entry).map {
+    val fishJson = Source.fromResource("sakana.json").mkString("")
+    val fishEntry = read[Entry](fishJson)
+    val houseJson = Source.fromResource("ie.json").mkString("")
+    val houseEntry = read[Entry](houseJson)
+
+    "should add entry for fish successfully" in {
+      entryRepository.upsert(fishEntry).map {
         _ => succeed
       }
     }
-    "should find entry by kanji" in {
+    "should find entry for fish by kanji" in {
       entryRepository.search("魚").map {
         foundEntries =>
           foundEntries.size should be (1)
-          foundEntries.headOption should contain (entry)
+          foundEntries.headOption should contain (fishEntry)
       }
     }
 
-    "should find entry by reading" in {
+    "should find entry for fish by reading" in {
       entryRepository.search("さかな").map {
         foundEntries =>
           foundEntries.size should be (1)
-          foundEntries.headOption should contain (entry)
+          foundEntries.headOption should contain (fishEntry)
       }
     }
 
-    "should find entry by meaning" in {
+    "should find entry for fish by meaning" in {
       entryRepository.search("fish").map {
         foundEntries =>
           foundEntries.size should be (1)
-          foundEntries.headOption should contain (entry)
+          foundEntries.headOption should contain (fishEntry)
+      }
+    }
+
+    "should add entry for house successfully" in {
+      entryRepository.upsert(houseEntry).map {
+        _ => succeed
+      }
+    }
+
+    "should find entry for house by meaning" in {
+      entryRepository.search("house").map {
+        foundEntries =>
+          foundEntries.size should be(1)
+          foundEntries.headOption should contain (houseEntry)
       }
     }
   }

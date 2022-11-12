@@ -1,0 +1,108 @@
+{
+  "ent_seq": "1191730",
+  "k_ele": [
+    {
+      "keb": "家",
+      "ke_pri": [
+        "ichi1"
+      ]
+    }
+  ],
+  "r_ele": [
+    {
+      "reb": "いえ",
+      "re_pri": [
+        "ichi1"
+      ]
+    }
+  ],
+  "sense": [
+    {
+      "pos": [
+        "noun (common) (futsuumeishi)"
+      ],
+      "gloss": [
+        {
+          "lang": "eng",
+          "content": "house"
+        },
+        {
+          "lang": "eng",
+          "content": "residence"
+        },
+        {
+          "lang": "eng",
+          "content": "dwelling"
+        }
+      ],
+      "example": [
+        {
+          "ex_srce": {
+            "exsrc_type": "tat",
+            "content": "80048"
+          },
+          "ex_text": "家",
+          "ex_sent": [
+            {
+              "lang": "jpn",
+              "content": "木立の間に家が見える。"
+            },
+            {
+              "lang": "eng",
+              "content": "I see a house among the trees."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "pos": [
+        "noun (common) (futsuumeishi)"
+      ],
+      "gloss": [
+        {
+          "lang": "eng",
+          "content": "family"
+        },
+        {
+          "lang": "eng",
+          "content": "household"
+        }
+      ],
+      "example": [
+        {
+          "ex_srce": {
+            "exsrc_type": "tat",
+            "content": "231180"
+          },
+          "ex_text": "家",
+          "ex_sent": [
+            {
+              "lang": "jpn",
+              "content": "あの家の繁栄は大戦中からのことだ。"
+            },
+            {
+              "lang": "eng",
+              "content": "The prosperity of the family dates from the Great War."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "pos": [
+        "noun (common) (futsuumeishi)"
+      ],
+      "gloss": [
+        {
+          "lang": "eng",
+          "content": "lineage"
+        },
+        {
+          "lang": "eng",
+          "content": "family name"
+        }
+      ]
+    }
+  ]
+}

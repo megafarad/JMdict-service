@@ -40,6 +40,8 @@ object Dependencies {
     akkaStream,
     slick,
     slickHikariCP,
+    postgresql,
+    akkaHttp,
     quartz,
     orgJson,
     json4sNative,

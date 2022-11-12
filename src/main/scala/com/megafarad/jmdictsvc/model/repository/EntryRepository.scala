@@ -52,16 +52,16 @@ class EntryRepository(db: Database, profile: JdbcProfile) extends EntryRepositor
 
     if (containsKanji) {
       val exactMatch = for {
-        matchingIndexes <- entryIndexes.filter(_.kanji === query)
+        matchingIndexes <- entryIndexes.filter(_.kanji === query).sortBy(_.priPoint)
         jsons <- entryJsons if matchingIndexes.id === jsons.entrySeq
       } yield (jsons, matchingIndexes)
 
       val likeMatch = for {
-        matchingIndexes <- entryIndexes.filter(_.kanji like s"%$query%")
+        matchingIndexes <- entryIndexes.filter(_.kanji like s"%$query%").sortBy(_.priPoint)
         jsons <- entryJsons if matchingIndexes.id === jsons.entrySeq
       } yield (jsons, matchingIndexes)
 
-      val matches = (exactMatch union likeMatch).sortBy(_._2.priPoint)
+      val matches = (exactMatch union likeMatch).distinctOn(_._1.json)
 
       db.run(matches.result).map {
         results => results.map {
@@ -70,16 +70,16 @@ class EntryRepository(db: Database, profile: JdbcProfile) extends EntryRepositor
       }
     } else if (onlyKana) {
       val exactMatch = for {
-        matchingIndexes <- entryIndexes.filter(_.reading === query)
+        matchingIndexes <- entryIndexes.filter(_.reading === query).sortBy(_.priPoint)
         jsons <- entryJsons if matchingIndexes.id === jsons.entrySeq
       } yield (jsons, matchingIndexes)
 
       val likeMatch = for {
-        matchingIndexes <- entryIndexes.filter(_.reading like s"%$query%")
+        matchingIndexes <- entryIndexes.filter(_.reading like s"%$query%").sortBy(_.priPoint)
         jsons <- entryJsons if matchingIndexes.id === jsons.entrySeq
       } yield (jsons, matchingIndexes)
 
-      val matches = (exactMatch union likeMatch).sortBy(_._2.priPoint)
+      val matches = (exactMatch union likeMatch).distinctOn(_._1.json)
 
       db.run(matches.result).map {
         results => results.map {
@@ -88,16 +88,16 @@ class EntryRepository(db: Database, profile: JdbcProfile) extends EntryRepositor
       }
     } else {
       val bestMatch = for {
-        matchingIndexes <- entryIndexes.filter(_.meaning like s"%$query;%")
+        matchingIndexes <- entryIndexes.filter(_.meaning like s"%$query;%").sortBy(_.priPoint)
         jsons <- entryJsons if matchingIndexes.id === jsons.entrySeq
       } yield (jsons, matchingIndexes)
 
       val likeMatch = for {
-        matchingIndexes <- entryIndexes.filter(_.meaning like s"%$query%")
+        matchingIndexes <- entryIndexes.filter(_.meaning like s"%$query%").sortBy(_.priPoint)
         jsons <- entryJsons if matchingIndexes.id === jsons.entrySeq
       } yield (jsons, matchingIndexes)
 
-      val matches = (bestMatch union likeMatch).sortBy(_._2.priPoint)
+      val matches = (bestMatch union likeMatch).distinctOn(_._1.json)
 
       db.run(matches.result).map {
         results => results.map {
@@ -166,10 +166,10 @@ class EntryRepository(db: Database, profile: JdbcProfile) extends EntryRepositor
         EntryIndex(id = entrySeq, kanji = "*", reading = reb, priPoint = priPoint, meaning = "")
     }
 
-    val withMeanings = entry.sense.foldLeft[Seq[EntryIndex]](Nil) {
-      (_, sense: Sense) =>
+    val withMeanings = entry.sense.foldLeft[Seq[EntryIndex]](withNoKanji) {
+      (entries, sense: Sense) =>
         val glosses = sense.gloss.toSeq.flatten.map(_.content).mkString("; ") + "; "
-        withNoKanji.map {
+        entries.map {
           entryIndex =>
             if (sense.stagk.isEmpty && sense.stagr.isEmpty) {
               entryIndex.copy(meaning = entryIndex.meaning + glosses)
