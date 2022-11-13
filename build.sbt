@@ -9,6 +9,7 @@ lazy val root = (project in file("."))
     name := "JMdict-service",
     Docker / packageName := "jmdict-service",
     dockerBaseImage := "amazoncorretto:19-alpine",
+    dockerUpdateLatest := true,
     dockerExposedPorts := Seq(9000)
   )
   .enablePlugins(AshScriptPlugin, DockerPlugin)

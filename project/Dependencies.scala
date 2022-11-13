@@ -11,7 +11,11 @@ object Version {
   val logbackClassic = "1.4.4"
   val moji4j = "1.2.0"
   val orgJson = "20220924"
+  val jwksRsa = "0.21.2"
+  val jwtCore = "9.1.1"
+  val jwtJson4s = "9.1.2"
   val scalaTest = "3.2.14"
+
 }
 
 object Library {
@@ -28,6 +32,9 @@ object Library {
   val akkaHttpJson4s = "de.heikoseeberger" %% "akka-http-json4s"      % Version.akkaHttpJson4s
   val logbackClassic = "ch.qos.logback"     % "logback-classic"       % Version.logbackClassic
   val moji4j = "com.andree-surya"           % "moji4j"                % Version.moji4j
+  val jwksRsa = "com.auth0"                 % "jwks-rsa"              % Version.jwksRsa
+  val jwtCore = "com.github.jwt-scala"     %% "jwt-core"              % Version.jwtCore
+  val jwtJson4s = "com.github.jwt-scala"   %% "jwt-json4s-native"     % Version.jwtJson4s
   val scalaTest = "org.scalatest"          %% "scalatest"             % Version.scalaTest % Test
 }
 
@@ -49,6 +56,9 @@ object Dependencies {
     akkaHttpJson4s,
     logbackClassic,
     moji4j,
+    jwksRsa,
+    jwtCore,
+    jwtJson4s,
     scalaTest
   )
 
