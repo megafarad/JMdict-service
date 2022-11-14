@@ -7,5 +7,8 @@ A RESTful interface for [JMdict](https://www.edrdg.org/jmdict/j_jmdict.html) - a
 
 # Usage
 
-The easiest way to use this project is via Docker.
+The easiest way to use this project is via Docker. 
+
+`docker pull sirhc1977/jmdict-service`
+
 
