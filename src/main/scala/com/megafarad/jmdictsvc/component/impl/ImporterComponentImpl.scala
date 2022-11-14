@@ -12,13 +12,14 @@ import org.quartz.core.jmx.JobDataMapSupport
 import org.quartz.impl.StdSchedulerFactory
 import org.quartz.{CronExpression, CronTrigger, JobDataMap, JobDetail}
 
-import java.util.Date
+import java.util.{Date, TimeZone}
 import scala.jdk.CollectionConverters._
 
 trait ImporterComponentImpl extends ImporterComponent {
   this: ActorSystemComponent with DatabaseComponent with ConfigComponent with Repositories with Logging =>
   private val schedule = config.getString("importer.schedule")
   private val source = config.getString("importer.source")
+  private val timeZone = config.getString("importer.timezone")
   private val typedSystem = actorSystem.toTyped
   private val jobDataMap = Map[String, AnyRef](
       "actorSystem" -> typedSystem,
@@ -35,7 +36,7 @@ trait ImporterComponentImpl extends ImporterComponent {
   val expression = new CronExpression(schedule)
   val trigger: CronTrigger = newTrigger()
     .withIdentity("ImportTrigger")
-    .withSchedule(cronSchedule(expression))
+    .withSchedule(cronSchedule(expression).inTimeZone(TimeZone.getTimeZone(timeZone)))
     .build()
   val jobData: JobDataMap = JobDataMapSupport.newJobDataMap(jobDataMap.asJava)
   val job: JobDetail = newJob(classOf[ImportJob])

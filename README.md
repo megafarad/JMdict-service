@@ -1,8 +1,8 @@
 # JMdict-service
 
-A RESTful interface for <a href="https://www.edrdg.org/jmdict/j_jmdict.html">JMdict</a>. Built on Akka HTTP.
+A RESTful interface for [JMdict](https://www.edrdg.org/jmdict/j_jmdict.html) - a Japanese dictionary. Built on Akka HTTP.
 
-* **Imports data into a Postgres database** on a configurable Quartz cron schedule.
+* **Imports data into a Postgres database** on a configurable [Quartz cron](http://www.quartz-scheduler.org/documentation/quartz-2.3.0/tutorials/crontrigger.html) schedule.
 * Services search queries.
 
 # Usage
