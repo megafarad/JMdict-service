@@ -45,5 +45,6 @@ trait ImporterComponentImpl extends ImporterComponent {
     .build()
 
   override val firstFire: Date = scheduler.scheduleJob(job, trigger)
+  log.info("Scheduled import, first fire: {}", firstFire)
 
 }
