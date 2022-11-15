@@ -6,6 +6,7 @@ import org.json4s._
 import org.json4s.jackson.Serialization
 import org.json4s.jackson.Serialization.{read, write}
 import com.moji4j.MojiDetector
+import org.slf4j.Logger
 import slick.jdbc.JdbcBackend.Database
 import slick.jdbc.JdbcProfile
 
@@ -15,6 +16,7 @@ import scala.concurrent.{ExecutionContext, Future}
 trait EntryRepositoryComponent {
   def upsert(entry: Entry): Future[Unit]
   def search(query: String): Future[Seq[Entry]]
+  def initializeDBTables: Future[Unit]
 }
 
 object EntryRepository {
@@ -31,8 +33,6 @@ class EntryRepository(db: Database, profile: JdbcProfile) extends EntryRepositor
 
   implicit val formats: Formats = Serialization.formats(NoTypeHints)
   implicit val ec: ExecutionContext = db.ioExecutionContext
-
-  entryJsonTable.createTablesIfNotExist(db)
 
   override def upsert(entry: Entry): Future[Unit] = {
     val (json, entryIndexesToUpdate) = getDBRows(entry)
@@ -101,8 +101,10 @@ class EntryRepository(db: Database, profile: JdbcProfile) extends EntryRepositor
         }
       }
     }
-
   }
+
+  def initializeDBTables: Future[Unit] = db.run(DBIO.seq(sqlu"CREATE SCHEMA IF NOT EXISTS jmdict",
+    entryJsons.schema.createIfNotExists, entryIndexes.schema.createIfNotExists))
 
   private def getDBRows(entry: Entry): (EntryJson, Seq[EntryIndex]) = {
     val entryJson: EntryJson = EntryJson(entry.ent_seq, write(entry))

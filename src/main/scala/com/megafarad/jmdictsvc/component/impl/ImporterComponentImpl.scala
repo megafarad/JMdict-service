@@ -8,10 +8,9 @@ import org.quartz
 import org.quartz.JobBuilder._
 import org.quartz.TriggerBuilder._
 import org.quartz.CronScheduleBuilder._
-import org.quartz.SimpleScheduleBuilder._
 import org.quartz.core.jmx.JobDataMapSupport
 import org.quartz.impl.StdSchedulerFactory
-import org.quartz.{CronExpression, CronTrigger, JobBuilder, JobDataMap, JobDetail}
+import org.quartz.{CronExpression, CronTrigger, JobBuilder, JobDataMap}
 
 import java.util.{Date, TimeZone}
 import scala.jdk.CollectionConverters._
