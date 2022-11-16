@@ -33,10 +33,6 @@ jobs:
           --health-retries 5
 
     steps:
-      - name: Install Postgres Client
-        run: |
-          apt-get update
-          apt-get install --yes postgresql-client
       - name: Setup test database
         run: psql -h postgres -U postgres -c 'CREATE DATABASE "jmdict_test";'
         env:
