@@ -57,8 +57,8 @@ class EntryRepository(db: Database, profile: JdbcProfile) extends EntryRepositor
       } yield (matchingIndexes, jsons)
 
       val matches = likeMatch.sortBy {
-        case (matchingIndexes, _) => (Case If(matchingIndexes.kanji === query) Then 0 Else 1, matchingIndexes.priPoint)
-      }
+        case (matchingIndexes, jsons) => (jsons.json, Case If(matchingIndexes.kanji === query) Then 0 Else 1, matchingIndexes.priPoint)
+      }.distinctOn(_._2.json)
 
       db.run(matches.result).map {
         results => results.map {
@@ -66,10 +66,6 @@ class EntryRepository(db: Database, profile: JdbcProfile) extends EntryRepositor
         }
       }
     } else if (onlyKana) {
-      val exactMatch = for {
-        matchingIndexes <- entryIndexes.filter(_.reading === query).sortBy(_.priPoint)
-        jsons <- entryJsons if matchingIndexes.id === jsons.entrySeq
-      } yield (jsons, matchingIndexes)
 
       val likeMatch = for {
         matchingIndexes <- entryIndexes.filter(_.reading like s"%$query%")
@@ -77,8 +73,8 @@ class EntryRepository(db: Database, profile: JdbcProfile) extends EntryRepositor
       } yield (matchingIndexes, jsons)
 
       val matches = likeMatch.sortBy {
-        case (matchingIndexes, _) => (Case If(matchingIndexes.reading === query) Then 0 Else 1, matchingIndexes.priPoint)
-      }
+        case (matchingIndexes, jsons) => (jsons.json, Case If(matchingIndexes.reading === query) Then 0 Else 1, matchingIndexes.priPoint)
+      }.distinctOn(_._2.json)
 
       db.run(matches.result).map {
         results => results.map {
@@ -92,8 +88,8 @@ class EntryRepository(db: Database, profile: JdbcProfile) extends EntryRepositor
       } yield (matchingIndexes, jsons)
 
       val matches = likeMatch.sortBy {
-        case (matchingIndexes, _) => (Case If(matchingIndexes.meaning like s"$query;%") Then 0 Else 1, matchingIndexes.priPoint)
-      }
+        case (matchingIndexes, jsons) => (jsons.json, Case If(matchingIndexes.meaning like s"$query;%") Then 0 Else 1, matchingIndexes.priPoint)
+      }.distinctOn(_._2.json)
 
       db.run(matches.result).map {
         results => results.map {
