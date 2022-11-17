@@ -57,13 +57,13 @@ class EntryRepository(db: Database, profile: JdbcProfile) extends EntryRepositor
       } yield (matchingIndexes, jsons)
 
       val matches = likeMatch.sortBy {
-        case (matchingIndexes, jsons) => (jsons.json, Case If(matchingIndexes.kanji === query) Then 0 Else 1, matchingIndexes.priPoint)
-      }.distinctOn(_._2.json)
+        case (matchingIndexes, jsons) => (Case If(matchingIndexes.kanji === query) Then 0 Else 1, matchingIndexes.priPoint)
+      }
 
       db.run(matches.result).map {
         results => results.map {
           case (_, EntryJson(_, json)) => read[Entry](json)
-        }
+        }.distinct
       }
     } else if (onlyKana) {
 
@@ -73,13 +73,13 @@ class EntryRepository(db: Database, profile: JdbcProfile) extends EntryRepositor
       } yield (matchingIndexes, jsons)
 
       val matches = likeMatch.sortBy {
-        case (matchingIndexes, jsons) => (jsons.json, Case If(matchingIndexes.reading === query) Then 0 Else 1, matchingIndexes.priPoint)
-      }.distinctOn(_._2.json)
+        case (matchingIndexes, jsons) => (Case If(matchingIndexes.reading === query) Then 0 Else 1, matchingIndexes.priPoint)
+      }
 
       db.run(matches.result).map {
         results => results.map {
           case (_, EntryJson(_, json)) => read[Entry](json)
-        }
+        }.distinct
       }
     } else {
       val likeMatch = for {
@@ -88,13 +88,13 @@ class EntryRepository(db: Database, profile: JdbcProfile) extends EntryRepositor
       } yield (matchingIndexes, jsons)
 
       val matches = likeMatch.sortBy {
-        case (matchingIndexes, jsons) => (jsons.json, Case If(matchingIndexes.meaning like s"$query;%") Then 0 Else 1, matchingIndexes.priPoint)
-      }.distinctOn(_._2.json)
+        case (matchingIndexes, jsons) => (Case If(matchingIndexes.meaning like s"$query;%") Then 0 Else 1, matchingIndexes.priPoint)
+      }
 
       db.run(matches.result).map {
         results => results.map {
           case (_, EntryJson(_, json)) => read[Entry](json)
-        }
+        }.distinct
       }
     }
   }

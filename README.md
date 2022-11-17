@@ -15,4 +15,30 @@ docker run --name jmdict-service -d -p 9000:9000 sirhc1977/jmdict-service
 
 You will need to have a Postgres database running locally as well.
 
+## Environment Variables
+
+There are a number of environment variables available for configuring behavior:
+
+* `DB_SERVER_NAME`
+* `DB_SERVER_PORT`
+* `DB_NAME`
+* `DB_USER`
+* `DB_PASSWORD`
+
+These are available for configuring the Postgres database connection.
+
+* `AUTH0_ENABLED`
+* `AUTH0_DOMAIN`
+* `AUTH0_AUDIENCE`
+
+These are for enabling [Auth0](https://auth0.com) authentication control. By default, `AUTH0_ENABLED` is false, and the 
+other two environment variables are ignored.
+
+`IMPORT_ON_STARTUP`
+
+Schedules an import upon start up. By default, this is false.
+
+`IMPORTER_SCHEDULE`
+
+Sets the quartz cron schedule. By default, this is set to `0 0 0 1/1 * ? *`.
 
