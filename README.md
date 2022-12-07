@@ -42,3 +42,9 @@ Schedules an import upon start up. By default, this is false.
 
 Sets the quartz cron schedule. By default, this is set to `0 0 0 1/1 * ? *`.
 
+## Copyright Notice
+
+If you deploy this service, you _must_ include the following copyright notice:
+
+> Copyright (C) 2022 The Electronic Dictionary Research and Development Group. Creative Commons Attribution-ShareAlike Licence (V3.0)
+
