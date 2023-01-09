@@ -15,7 +15,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 trait EntryRepositoryComponent {
   def upsert(entry: Entry): Future[Unit]
-  def search(query: String): Future[Seq[Entry]]
+  def search(query: String, offset: Int, limit: Int): Future[Seq[Entry]]
   def initializeDBTables: Future[Unit]
 }
 
@@ -44,7 +44,7 @@ class EntryRepository(db: Database, profile: JdbcProfile) extends EntryRepositor
     db.run(dbActions)
   }
 
-  override def search(query: String): Future[Seq[Entry]] = {
+  override def search(query: String, offset: Int, limit: Int): Future[Seq[Entry]] = {
 
     val detector = new MojiDetector
     val containsKanji = detector.hasKanji(query)
@@ -52,49 +52,49 @@ class EntryRepository(db: Database, profile: JdbcProfile) extends EntryRepositor
 
     if (containsKanji) {
       val likeMatch = for {
-        matchingIndexes <- entryIndexes.filter(_.kanji like s"%$query%")
-        jsons <- entryJsons if matchingIndexes.id === jsons.entrySeq
-      } yield (matchingIndexes, jsons)
+        matchingIndex <- entryIndexes.filter(_.kanji like s"%$query%").sortBy {
+          idx => (Case If(idx.kanji === query) Then 0 Else 1, idx.priPoint)
+        }
+        json <- entryJsons if matchingIndex.id === json.entrySeq
+      } yield json
 
-      val matches = likeMatch.sortBy {
-        case (matchingIndexes, jsons) => (Case If(matchingIndexes.kanji === query) Then 0 Else 1, matchingIndexes.priPoint)
-      }
+      val matches = likeMatch.groupBy(x => x).map(_._1).drop(offset).take(limit)
 
       db.run(matches.result).map {
         results => results.map {
-          case (_, EntryJson(_, json)) => read[Entry](json)
-        }.distinct
+          entryJson => read[Entry](entryJson.json)
+        }
       }
     } else if (onlyKana) {
 
       val likeMatch = for {
-        matchingIndexes <- entryIndexes.filter(_.reading like s"%$query%")
-        jsons <- entryJsons if matchingIndexes.id === jsons.entrySeq
-      } yield (matchingIndexes, jsons)
+        matchingIndex <- entryIndexes.filter(_.reading like s"%$query%").sortBy {
+          idx => (Case If(idx.reading === query) Then 0 Else 1, idx.priPoint)
+        }
+        json <- entryJsons if matchingIndex.id === json.entrySeq
+      } yield json
 
-      val matches = likeMatch.sortBy {
-        case (matchingIndexes, jsons) => (Case If(matchingIndexes.reading === query) Then 0 Else 1, matchingIndexes.priPoint)
-      }
+      val matches = likeMatch.groupBy(x => x).map(_._1).drop(offset).take(limit)
 
       db.run(matches.result).map {
         results => results.map {
-          case (_, EntryJson(_, json)) => read[Entry](json)
-        }.distinct
+          entryJson => read[Entry](entryJson.json)
+        }
       }
     } else {
       val likeMatch = for {
-        matchingIndexes <- entryIndexes.filter(_.meaning like s"%$query%").sortBy(_.priPoint)
-        jsons <- entryJsons if matchingIndexes.id === jsons.entrySeq
-      } yield (matchingIndexes, jsons)
+        matchingIndex <- entryIndexes.filter(_.meaning like s"%$query%").sortBy {
+          idx => Case If(idx.meaning like s"%$query;%") Then 0 If(idx.meaning === query) Then 0 Else 1
+        }
+        json <- entryJsons if matchingIndex.id === json.entrySeq
+      } yield json
 
-      val matches = likeMatch.sortBy {
-        case (matchingIndexes, jsons) => (Case If(matchingIndexes.meaning like s"$query;%") Then 0 Else 1, matchingIndexes.priPoint)
-      }
+      val matches = likeMatch.groupBy(x => x).map(_._1).drop(offset).take(limit)
 
       db.run(matches.result).map {
         results => results.map {
-          case (_, EntryJson(_, json)) => read[Entry](json)
-        }.distinct
+          entryJson => read[Entry](entryJson.json)
+        }
       }
     }
   }

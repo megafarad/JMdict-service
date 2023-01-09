@@ -15,12 +15,14 @@ trait EntryService {
 
   registerRoute(pathPrefix("api" / "search") {
     get {
-      path(Segment) {  query: String =>
-        if (auth0enabled) {
-          authenticateOAuth2("KobuKobu", Auth0Authenticator(auth0domain, auth0Audience)) {
-            _ => handleResponse[Seq[Entry]](entryRepository.search(query.trim))
-          }
-        } else handleResponse[Seq[Entry]](entryRepository.search(query.trim))
+      parameters("offset".as[Int].withDefault(0), "limit".as[Int].withDefault(10)) { (offset, limit) =>
+        path(Segment) { query: String =>
+          if (auth0enabled) {
+            authenticateOAuth2("KobuKobu", Auth0Authenticator(auth0domain, auth0Audience)) {
+              _ => handleResponse[Seq[Entry]](entryRepository.search(query.trim, offset, limit))
+            }
+          } else handleResponse[Seq[Entry]](entryRepository.search(query.trim, offset, limit))
+        }
       }
     }
   })

@@ -24,7 +24,7 @@ class EntryRepositorySpec extends AsyncFreeSpec with DatabaseSpec with Matchers 
       }
     }
     "should find entry for fish by kanji" in {
-      entryRepository.search("魚").map {
+      entryRepository.search("魚", 0, 10).map {
         foundEntries =>
           foundEntries.size should be (1)
           foundEntries.headOption should contain (fishEntry)
@@ -32,7 +32,7 @@ class EntryRepositorySpec extends AsyncFreeSpec with DatabaseSpec with Matchers 
     }
 
     "should find entry for fish by reading" in {
-      entryRepository.search("さかな").map {
+      entryRepository.search("さかな", 0, 10).map {
         foundEntries =>
           foundEntries.size should be (1)
           foundEntries.headOption should contain (fishEntry)
@@ -40,7 +40,7 @@ class EntryRepositorySpec extends AsyncFreeSpec with DatabaseSpec with Matchers 
     }
 
     "should find entry for fish by meaning" in {
-      entryRepository.search("fish").map {
+      entryRepository.search("fish", 0, 10).map {
         foundEntries =>
           foundEntries.size should be (1)
           foundEntries.headOption should contain (fishEntry)
@@ -54,7 +54,7 @@ class EntryRepositorySpec extends AsyncFreeSpec with DatabaseSpec with Matchers 
     }
 
     "should find entry for house by meaning" in {
-      entryRepository.search("house").map {
+      entryRepository.search("house",0, 10).map {
         foundEntries =>
           foundEntries.size should be(1)
           foundEntries.headOption should contain (houseEntry)
