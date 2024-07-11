@@ -1,35 +1,35 @@
 import sbt._
 
 object Version {
-  val akka = "2.7.0"
-  val slick = "3.4.1"
-  val postgres = "42.5.0"
-  val akkaHttp = "10.4.0"
+  val pekko = "1.0.3"
+  val slick = "3.5.0"
+  val postgres = "42.7.3"
+  val pekkoHttp = "1.0.1"
   val quartz = "2.3.2"
-  val json4s = "4.0.6"
-  val akkaHttpJson4s = "1.39.2"
-  val logbackClassic = "1.4.4"
+  val json4s = "4.0.7"
+  val pekkoHttpJson4s = "2.6.0"
+  val logbackClassic = "1.5.6"
   val moji4j = "1.2.0"
   val orgJson = "20220924"
-  val jwksRsa = "0.21.2"
-  val jwtCore = "9.1.1"
-  val jwtJson4s = "9.1.2"
-  val scalaTest = "3.2.14"
+  val jwksRsa = "0.22.1"
+  val jwtCore = "10.0.1"
+  val jwtJson4s = "10.0.0"
+  val scalaTest = "3.2.19"
 
 }
 
 object Library {
-  val akkaActor = "com.typesafe.akka"      %% "akka-actor-typed"      % Version.akka
-  val akkaStream = "com.typesafe.akka"     %% "akka-stream"           % Version.akka
+  val pekkoActor = "org.apache.pekko"      %% "pekko-actor-typed"     % Version.pekko
+  val pekkoStream = "org.apache.pekko"     %% "pekko-stream"          % Version.pekko
   val slick = "com.typesafe.slick"         %% "slick"                 % Version.slick
   val slickHikariCP = "com.typesafe.slick" %% "slick-hikaricp"        % Version.slick
   val postgresql = "org.postgresql"         % "postgresql"            % Version.postgres
-  val akkaHttp = "com.typesafe.akka"       %% "akka-http"             % Version.akkaHttp
+  val pekkoHttp = "org.apache.pekko"       %% "pekko-http"            % Version.pekkoHttp
   val quartz = "org.quartz-scheduler"       % "quartz"                % Version.quartz
   val orgJson =  "org.json"                 % "json"                  % Version.orgJson
   val json4sNative = "org.json4s"          %% "json4s-native"         % Version.json4s
   val json4sJackson = "org.json4s"         %% "json4s-jackson"        % Version.json4s
-  val akkaHttpJson4s = "de.heikoseeberger" %% "akka-http-json4s"      % Version.akkaHttpJson4s
+  val pekkoHttpJson4s = "com.github.pjfanning" %% "pekko-http-json4s" % Version.pekkoHttpJson4s
   val logbackClassic = "ch.qos.logback"     % "logback-classic"       % Version.logbackClassic
   val moji4j = "com.andree-surya"           % "moji4j"                % Version.moji4j
   val jwksRsa = "com.auth0"                 % "jwks-rsa"              % Version.jwksRsa
@@ -43,17 +43,17 @@ object Dependencies {
   import Library._
 
   val depends: Seq[ModuleID] = Seq(
-    akkaActor,
-    akkaStream,
+    pekkoActor,
+    pekkoStream,
     slick,
     slickHikariCP,
     postgresql,
-    akkaHttp,
+    pekkoHttp,
     quartz,
     orgJson,
     json4sNative,
     json4sJackson,
-    akkaHttpJson4s,
+    pekkoHttpJson4s,
     logbackClassic,
     moji4j,
     jwksRsa,

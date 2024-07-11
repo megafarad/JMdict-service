@@ -52,7 +52,4 @@ class EntryJsonTableComponent(val profile: JdbcProfile) {
 
   val entryIndexes: TableQuery[EntryIndexTable] = TableQuery[EntryIndexTable]
 
-  def createTablesIfNotExist(db: Database): Future[Unit] = db.run(DBIO.seq(sqlu"CREATE SCHEMA IF NOT EXISTS jmdict",
-    entryJsons.schema.createIfNotExists,
-    entryIndexes.schema.createIfNotExists))
 }

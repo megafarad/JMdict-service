@@ -1,6 +1,6 @@
 package com.megafarad.jmdictsvc.component.impl
 
-import akka.actor.typed.scaladsl.adapter._
+import org.apache.pekko.actor.typed.scaladsl.adapter._
 import com.megafarad.jmdictsvc.component._
 import com.megafarad.jmdictsvc.job.ImportJob
 import com.megafarad.jmdictsvc.utils.Logging

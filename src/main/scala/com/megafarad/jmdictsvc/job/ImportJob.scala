@@ -1,11 +1,11 @@
 package com.megafarad.jmdictsvc.job
 
-import akka.Done
-import akka.actor.typed.ActorSystem
-import akka.http.scaladsl.Http
-import akka.http.scaladsl.model.{HttpRequest, HttpResponse, Uri}
-import akka.stream.scaladsl.{FileIO, Sink, Source}
-import akka.stream.{IOResult, Materializer}
+import org.apache.pekko.Done
+import org.apache.pekko.actor.typed.ActorSystem
+import org.apache.pekko.http.scaladsl.Http
+import org.apache.pekko.http.scaladsl.model.{HttpRequest, HttpResponse, Uri}
+import org.apache.pekko.stream.scaladsl.{FileIO, Sink, Source}
+import org.apache.pekko.stream.{IOResult, Materializer}
 import com.megafarad.jmdictsvc.model.entity.Entry
 import com.megafarad.jmdictsvc.model.repository.EntryRepositoryComponent
 import org.json.XMLParserConfiguration

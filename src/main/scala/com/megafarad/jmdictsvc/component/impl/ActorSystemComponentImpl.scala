@@ -1,6 +1,6 @@
 package com.megafarad.jmdictsvc.component.impl
 
-import akka.actor.ActorSystem
+import org.apache.pekko.actor.ActorSystem
 import com.megafarad.jmdictsvc.component.{ActorSystemComponent, ConfigComponent}
 import com.megafarad.jmdictsvc.utils.Logging
 

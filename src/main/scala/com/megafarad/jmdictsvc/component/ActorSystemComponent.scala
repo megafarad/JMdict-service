@@ -1,6 +1,6 @@
 package com.megafarad.jmdictsvc.component
 
-import akka.actor.ActorSystem
+import org.apache.pekko.actor.ActorSystem
 
 import scala.concurrent.ExecutionContext
 

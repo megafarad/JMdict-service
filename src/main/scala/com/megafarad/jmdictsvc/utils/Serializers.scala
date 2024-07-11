@@ -1,6 +1,6 @@
 package com.megafarad.jmdictsvc.utils
 
-import de.heikoseeberger.akkahttpjson4s.Json4sSupport
+import com.github.pjfanning.pekkohttpjson4s.Json4sSupport
 import org.json4s.native.Serialization
 import org.json4s.{Formats, NoTypeHints, jackson}
 

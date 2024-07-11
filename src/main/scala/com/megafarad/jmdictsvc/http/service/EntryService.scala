@@ -1,7 +1,7 @@
 package com.megafarad.jmdictsvc.http.service
 
 import com.megafarad.jmdictsvc.component.{ActorSystemComponent, ConfigComponent, Repositories}
-import akka.http.scaladsl.server.Directives._
+import org.apache.pekko.http.scaladsl.server.Directives._
 import com.megafarad.jmdictsvc.http.HttpBaseService
 import com.megafarad.jmdictsvc.model.entity.Entry
 import com.megafarad.jmdictsvc.utils.{Logging, Serializers}

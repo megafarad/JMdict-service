@@ -1,6 +1,6 @@
 package com.megafarad.jmdictsvc.component.impl
 
-import akka.http.scaladsl.Http
+import org.apache.pekko.http.scaladsl.Http
 import com.megafarad.jmdictsvc.component._
 import com.megafarad.jmdictsvc.http.HttpRoute
 
